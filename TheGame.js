@@ -1,14 +1,22 @@
 
+
 let theBoard = document.createElement('table')
 let refresh = document.getElementById('refresh');
 
 const gameBoard = [ // where the game state is stored
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 1, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 2, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
 const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
@@ -26,7 +34,7 @@ const findPlayer = () => { //finds the player's position
         }
     }
     document.write('YOU LOSE')
-    return false
+    clearInterval(enemyAI)
 }
 
 const findEnemy = () => { //finds the enemy's position
@@ -37,13 +45,14 @@ const findEnemy = () => { //finds the enemy's position
             }
         }
     }
+    return false
 }
 
 //the movement functions
 const moveRight = () => {
     const{ row, cell } = findPlayer()
     console.log(row, cell)
-    if(cell === 7) {
+    if(cell === gameBoard[row].length -1) {
         return
     }
     gameBoard[row][cell + 1] = 1
@@ -71,7 +80,7 @@ const moveUp = () => {
 
 const moveDown = () => {
     const{ row, cell } = findPlayer()
-    if(row === 7) {
+    if(row === gameBoard.length - 1) {
         return
     }
     gameBoard[row + 1][cell] = 1
@@ -96,6 +105,9 @@ const movement = (e) => {
 
 //the enemy functions
 const enemyMove = () => {
+    if(!findEnemy()) {
+        gameBoard[0][0] = 2
+    }
     const{ row, cell } = findPlayer()
     const{ enemyRow, enemyCell } = findEnemy()
     console.log(enemyRow, row)
@@ -123,7 +135,11 @@ const enemyMove = () => {
         gameBoard[enemyRow - 1][enemyCell -1] = 2
         gameBoard[enemyRow][enemyCell] = 0
     } else if(row < enemyRow && cell > enemyCell) {
-        
+        gameBoard[enemyRow - 1][enemyCell + 1] = 2
+        gameBoard[enemyRow][enemyCell] = 0
+    } else if(row > enemyRow && cell < enemyCell) {
+        gameBoard[enemyRow + 1][enemyCell - 1] = 2
+        gameBoard[enemyRow][enemyCell] = 0
     }
     
     buildGameBoard()
@@ -151,4 +167,6 @@ const buildGameBoard = () => {
 
 refresh.addEventListener('click', buildGameBoard)
 document.addEventListener('keydown', movement)
-setInterval(enemyMove, 3000)
+
+let enemyAI = setInterval(enemyMove, 1000)
+enemyAI()
