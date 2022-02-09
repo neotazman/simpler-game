@@ -61,6 +61,8 @@ const moveRight = () => {
     const{ row, cell } = findPlayer()
     console.log(row, cell)
     if(cell === gameBoard[row].length -1) {
+        gameBoard[row][0] = 1
+        gameBoard[row][cell] = 0
         return
     }
     gameBoard[row][cell + 1] = 1
@@ -71,6 +73,8 @@ const moveRight = () => {
 const moveLeft = () => {
     const{ row, cell } = findPlayer()
     if(cell === 0) {
+        gameBoard[row][gameBoard[row].length - 1] = 1
+        gameBoard[row][cell] = 0
         return
     }
     gameBoard[row][cell - 1] = 1
@@ -80,6 +84,8 @@ const moveLeft = () => {
 const moveUp = () => {
     const{ row, cell } = findPlayer()
     if(row === 0) {
+        gameBoard[gameBoard.length - 1][cell] = 1
+        gameBoard[row][cell] = 0
         return
     }
     gameBoard[row - 1][cell] = 1
@@ -89,6 +95,8 @@ const moveUp = () => {
 const moveDown = () => {
     const{ row, cell } = findPlayer()
     if(row === gameBoard.length - 1) {
+        gameBoard[0][cell] = 1
+        gameBoard[row][cell] = 0
         return
     }
     gameBoard[row + 1][cell] = 1
