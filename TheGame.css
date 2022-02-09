@@ -1,0 +1,11 @@
+* {
+    outline: 1px solid crimson;
+}
+
+.player {
+    background-color: rgba(252, 5, 5, 1);
+}
+
+.enemy {
+    background-color: rgb(51, 8, 7, 1);
+}
