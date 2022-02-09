@@ -1,13 +1,18 @@
 
 
 let theBoard = document.createElement('table')
-let refresh = document.getElementById('refresh');
+let refresh = document.getElementById('refresh')
+
+let secondsElapsed = 0
+let timeElapsed = () => {
+    secondsElapsed++
+    console.log(secondsElapsed)
+}
 
 const gameBoard = [ // where the game state is stored
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -17,6 +22,7 @@ const gameBoard = [ // where the game state is stored
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
 ]
 
 const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
@@ -25,7 +31,7 @@ const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
     else if(cell === 2) return 'enemy'
 }
 
-const findPlayer = () => { //finds the player's position
+const findPlayer = () => { //finds the player's position. also checks if the player loses
     for(let row = 0; row < gameBoard.length; row++) {
         for(let cell = 0; cell < gameBoard[row].length; cell++) {
             if(cellValue(gameBoard[row][cell]) === 'player') {
@@ -33,8 +39,10 @@ const findPlayer = () => { //finds the player's position
             }
         }
     }
-    document.write('YOU LOSE')
+    document.write(`YOU LOSE! You scored ${secondsElapsed}`)
     clearInterval(enemyAI)
+    clearInterval(score)
+    secondsElapsed = 0
 }
 
 const findEnemy = () => { //finds the enemy's position
@@ -104,8 +112,8 @@ const movement = (e) => {
 }
 
 //the enemy functions
-const enemyMove = () => {
-    if(!findEnemy()) {
+const enemyMove = () => { //checks the player's position and the enemy's position and moves the enemy towards the player
+    if(!findEnemy()) { //i haven't yet added logic so the player can't kill the enemy, but if it does die, it just resets the postion
         gameBoard[0][0] = 2
     }
     const{ row, cell } = findPlayer()
@@ -145,6 +153,11 @@ const enemyMove = () => {
     buildGameBoard()
 }
 
+
+const powerUp = () => {
+
+}
+
 const buildGameBoard = () => {
     theBoard.innerHTML = ''
     gameBoard.forEach((row, i) => {
@@ -168,5 +181,7 @@ const buildGameBoard = () => {
 refresh.addEventListener('click', buildGameBoard)
 document.addEventListener('keydown', movement)
 
-let enemyAI = setInterval(enemyMove, 1000)
+let enemyAI = setInterval(enemyMove, 200)
+let score = setInterval(timeElapsed, 1000)
 enemyAI()
+score()
