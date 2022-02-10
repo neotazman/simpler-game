@@ -2,10 +2,16 @@
     outline: 1px solid crimson;
 }
 
+td {
+    size: 12px;
+}
+
 .player {
     background-color: rgba(252, 5, 5, 1);
+    color: white;
 }
 
 .enemy {
     background-color: rgb(51, 8, 7, 1);
+    color: rgb(255, 230, 6);
 }

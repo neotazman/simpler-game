@@ -10,19 +10,24 @@ let timeElapsed = () => {
 }
 
 const gameBoard = [ // where the game state is stored
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
 ]
 
 const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
@@ -103,30 +108,28 @@ const moveDown = () => {
     gameBoard[row][cell] = 0
 }
 
-const movement = (e) => {
+const movement = (e) => { //the player's movement
     e.preventDefault()
     console.log(e)
-    if(e.keyCode === 39) {
+    if(e.keyCode === 39 || e.keyCode === 68) {
         moveRight()
-    } else if(e.keyCode === 37) {
+    } else if(e.keyCode === 37 || e.keyCode === 65) {
         moveLeft()
-    } else if(e.keyCode === 38) {
+    } else if(e.keyCode === 38 || e.keyCode === 87) {
         moveUp()
-    } else if(e.keyCode === 40) {
+    } else if(e.keyCode === 40 || 83) {
         moveDown()
     }
 
     buildGameBoard()
 }
 
-//the enemy functions
 const enemyMove = () => { //checks the player's position and the enemy's position and moves the enemy towards the player
     if(!findEnemy()) { //i haven't yet added logic so the player can't kill the enemy, but if it does die, it just resets the postion
         gameBoard[0][0] = 2
     }
     const{ row, cell } = findPlayer()
     const{ enemyRow, enemyCell } = findEnemy()
-    console.log(enemyRow, row)
     if(row === enemyRow) {
         if(cell < enemyCell) {
             gameBoard[enemyRow][enemyCell - 1] = 2
@@ -161,7 +164,6 @@ const enemyMove = () => { //checks the player's position and the enemy's positio
     buildGameBoard()
 }
 
-
 const powerUp = () => {
 
 }
@@ -186,10 +188,17 @@ const buildGameBoard = () => {
     document.body.append(theBoard)
 }
 
-refresh.addEventListener('click', buildGameBoard)
-document.addEventListener('keydown', movement)
-
 let enemyAI = setInterval(enemyMove, 200)
 let score = setInterval(timeElapsed, 1000)
-enemyAI()
-score()
+
+
+const runGame = () => {
+    buildGameBoard()
+    enemyAI()
+    score()
+}
+
+refresh.addEventListener('click', runGame)
+document.addEventListener('keydown', movement)
+
+
