@@ -2,22 +2,25 @@
 
 let theBoard = document.createElement('table')
 let HUD = document.createElement('p')
+HUD.id = 'HUD'
 //let refresh = document.getElementById('refresh') //isn't working with the enemy AI
 
+//you get power ups over time
 let totalPowerUps = 0
 let buildPowerUps = () => {
-    HUD.innerText = ''
     totalPowerUps++
-    console.log(totalPowerUps)
-    if(totalPowerUps === 1) {
-        HUD.innerText = 'You Have 1 Power Up'
-    } else {
-        HUD.innerText = `You Have ${totalPowerUps} Power Ups`
-    }
-
-    document.body.append(HUD)
 }
 
+let HUDDisplay = (container) => {//Updates the HUD
+    HUD.innerText = 'Game State Details: '
+    if(totalPowerUps === 1) {
+        HUD.innerText += 'You Have 1 Power Up'
+    } else {
+        HUD.innerText += `You Have ${totalPowerUps} Power Ups`
+    }
+    HUD.innerText += ` Difficulty ${difficultyLevel} Your Score is ${secondsElapsed}`
+    container.append(HUD)
+}
 
 //the timer is the score
 let secondsElapsed = 0
@@ -51,8 +54,6 @@ const gameBoard = [ // where the game state is stored
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
 const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
@@ -73,6 +74,9 @@ const findPlayer = () => { //finds the player's position. also checks if the pla
     document.write(`YOU LOSE! You scored ${secondsElapsed}`)
     clearInterval(enemyAI)
     clearInterval(score)
+    clearInterval(difficulty)
+    clearInterval(powerUpBuilders)
+    //clearInterval(HUDRefresh)
     secondsElapsed = 0
 }
 
@@ -109,7 +113,6 @@ const moveRight = () => {
     gameBoard[row][cell + 1] = 1
     gameBoard[row][cell] = 0
 }
-
 const moveLeft = () => {
     const{ row, cell } = findPlayer()
     if(cell === 0) {
@@ -120,7 +123,6 @@ const moveLeft = () => {
     gameBoard[row][cell - 1] = 1
     gameBoard[row][cell] = 0
 }
-
 const moveUp = () => {
     const{ row, cell } = findPlayer()
     if(row === 0) {
@@ -131,7 +133,6 @@ const moveUp = () => {
     gameBoard[row - 1][cell] = 1
     gameBoard[row][cell] = 0
 }
-
 const moveDown = () => {
     const{ row, cell } = findPlayer()
     if(row === gameBoard.length - 1) {
@@ -158,6 +159,7 @@ const movement = (e) => { //the player's movement
     }
     buildGameBoard()
 }
+
 
 const enemyMove = () => { //checks the player's position and the enemy's position and moves the enemy towards the player
     if(!findEnemy()) { //i haven't yet added logic so the player can't kill the enemy, but if it does die, it just resets the postion
@@ -254,6 +256,7 @@ const powerUp = () => {
 
 const buildGameBoard = () => {
     theBoard.innerHTML = ''
+    HUDDisplay(theBoard)
     gameBoard.forEach((row, i) => {
         let thisRow = document.createElement('tr')
         row.forEach((cell, j) => {
@@ -274,15 +277,26 @@ const buildGameBoard = () => {
     document.body.append(theBoard)
 }
 
-let enemyAI = setInterval(enemyMove, 200)
+
+let enemySpeed = 300
+let difficultyLevel = 0
+const difficultyRise = () => {
+    clearInterval(enemyAI)
+    enemySpeed*= 0.9
+    console.log(enemySpeed)
+    enemyAI = setInterval(enemyMove, enemySpeed)
+    difficultyLevel++
+}
+
+let difficulty = setInterval(difficultyRise, 5000)
+let enemyAI = setInterval(enemyMove, enemySpeed)
 let score = setInterval(timeElapsed, 1000)
 let powerUpBuilders = setInterval(buildPowerUps, 10000)
+//let HUDRefresh = setInterval(HUDDisplay,1000)
 
 
 const runGame = () => {
     buildGameBoard()
-    enemyAI()
-    score()
 
 }
 

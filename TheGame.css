@@ -3,10 +3,28 @@
     box-sizing: border-box;
 }
 
+#HUD {
+    min-height: 5px;
+    align-self: flex-start;
+    align-items: center;
+}
+
+table {
+    margin: auto;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: flex-end;
+}
+
+tr {
+    align-self: flex-end;
+}
+
 td {
     padding: 2px;
     min-width: 5px;
     min-height: 5px;
+    max-width: 5vw;
 }
 
 .player {
