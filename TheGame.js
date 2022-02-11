@@ -1,4 +1,5 @@
-
+//IMPORTS
+//import enemy from "./Enemy.js"
 
 let theBoard = document.createElement('table')
 let HUD = document.createElement('p')
