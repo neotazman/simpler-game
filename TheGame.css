@@ -18,3 +18,8 @@ td {
     background-color: rgb(51, 8, 7, 1);
     color: rgb(255, 230, 6);
 }
+
+.decoy {
+    background-color: rgb(63, 50, 250); 
+    color: silver;
+}

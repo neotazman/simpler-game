@@ -29,6 +29,7 @@ const gameBoard = [ // where the game state is stored
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -36,14 +37,14 @@ const gameBoard = [ // where the game state is stored
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 ]
 
 const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
     if(cell === 0) return 'empty'
     else if(cell === 1) return 'player'
     else if(cell === 2) return 'enemy'
+    else if(cell === 3) return 'decoy'
 }
 
 const findPlayer = () => { //finds the player's position. also checks if the player loses
@@ -65,6 +66,17 @@ const findEnemy = () => { //finds the enemy's position
         for(let enemyCell = 0; enemyCell < gameBoard[enemyRow].length; enemyCell++) {
             if(cellValue(gameBoard[enemyRow][enemyCell]) === 'enemy') {
                 return {enemyRow, enemyCell}
+            }
+        }
+    }
+    return false
+}
+
+const findDecoy = () => { //finds the decoy block's position
+    for(let decoyRow = 0; decoyRow < gameBoard.length; decoyRow++) {
+        for(let decoyCell = 0; decoyCell < gameBoard[decoyRow].length; decoyCell++) {
+            if(cellValue(gameBoard[decoyRow][decoyCell]) === 'decoy') {
+                return {decoyRow, decoyCell}
             }
         }
     }
@@ -129,8 +141,9 @@ const movement = (e) => { //the player's movement
         moveUp()
     } else if(e.keyCode === 40 || e.keyCode === 83) {
         moveDown()
+    } else if(e.keyCode === 32) {
+        powerUp()
     }
-
     buildGameBoard()
 }
 
@@ -140,42 +153,83 @@ const enemyMove = () => { //checks the player's position and the enemy's positio
     }
     const{ row, cell } = findPlayer()
     const{ enemyRow, enemyCell } = findEnemy()
-    if(row === enemyRow) {
-        if(cell < enemyCell) {
-            gameBoard[enemyRow][enemyCell - 1] = 2
+    const{ decoyRow, decoyCell } = findDecoy()
+    //to chase the decoy
+    if(findDecoy()) {
+        if(decoyRow === enemyRow) {
+            if(decoyCell < enemyCell) {
+                gameBoard[enemyRow][enemyCell - 1] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+            } else if(decoyCell > enemyCell) {
+                gameBoard[enemyRow][enemyCell + 1] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+    
+            }
+        } else if(decoyCell === enemyCell) {
+            if(decoyRow < enemyRow) {
+                gameBoard[enemyRow - 1][enemyCell] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+            } else if(decoyRow > enemyRow) {
+                gameBoard[enemyRow + 1][enemyCell] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+            }
+        } else if(decoyRow > enemyRow && decoyCell > enemyCell) {
+            gameBoard[enemyRow + 1][enemyCell + 1] = 2
             gameBoard[enemyRow][enemyCell] = 0
-        } else if(cell > enemyCell) {
-            gameBoard[enemyRow][enemyCell + 1] = 2
+        } else if(decoyRow < enemyRow && decoyCell < enemyCell) {
+            gameBoard[enemyRow - 1][enemyCell -1] = 2
             gameBoard[enemyRow][enemyCell] = 0
+        } else if(decoyRow < enemyRow && decoyCell > enemyCell) {
+            gameBoard[enemyRow - 1][enemyCell + 1] = 2
+            gameBoard[enemyRow][enemyCell] = 0
+        } else if(decoyRow > enemyRow && decoyCell < enemyCell) {
+            gameBoard[enemyRow + 1][enemyCell - 1] = 2
+            gameBoard[enemyRow][enemyCell] = 0
+        }
+    } else {//to chase the player
+        if(row === enemyRow) {
+            if(cell < enemyCell) {
+                gameBoard[enemyRow][enemyCell - 1] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+            } else if(cell > enemyCell) {
+                gameBoard[enemyRow][enemyCell + 1] = 2
+                gameBoard[enemyRow][enemyCell] = 0
 
-        }
-    } else if(cell === enemyCell) {
-        if(row < enemyRow) {
-            gameBoard[enemyRow - 1][enemyCell] = 2
+            }
+        } else if(cell === enemyCell) {
+            if(row < enemyRow) {
+                gameBoard[enemyRow - 1][enemyCell] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+            } else if(row > enemyRow) {
+                gameBoard[enemyRow + 1][enemyCell] = 2
+                gameBoard[enemyRow][enemyCell] = 0
+            }
+        } else if(row > enemyRow && cell > enemyCell) {
+            gameBoard[enemyRow + 1][enemyCell + 1] = 2
             gameBoard[enemyRow][enemyCell] = 0
-        } else if(row > enemyRow) {
-            gameBoard[enemyRow][enemyCell + 1] = 2
+        } else if(row < enemyRow && cell < enemyCell) {
+            gameBoard[enemyRow - 1][enemyCell -1] = 2
+            gameBoard[enemyRow][enemyCell] = 0
+        } else if(row < enemyRow && cell > enemyCell) {
+            gameBoard[enemyRow - 1][enemyCell + 1] = 2
+            gameBoard[enemyRow][enemyCell] = 0
+        } else if(row > enemyRow && cell < enemyCell) {
+            gameBoard[enemyRow + 1][enemyCell - 1] = 2
             gameBoard[enemyRow][enemyCell] = 0
         }
-    } else if(row > enemyRow && cell > enemyCell) {
-        gameBoard[enemyRow + 1][enemyCell + 1] = 2
-        gameBoard[enemyRow][enemyCell] = 0
-    } else if(row < enemyRow && cell < enemyCell) {
-        gameBoard[enemyRow - 1][enemyCell -1] = 2
-        gameBoard[enemyRow][enemyCell] = 0
-    } else if(row < enemyRow && cell > enemyCell) {
-        gameBoard[enemyRow - 1][enemyCell + 1] = 2
-        gameBoard[enemyRow][enemyCell] = 0
-    } else if(row > enemyRow && cell < enemyCell) {
-        gameBoard[enemyRow + 1][enemyCell - 1] = 2
-        gameBoard[enemyRow][enemyCell] = 0
+
     }
+
     
     buildGameBoard()
 }
 
-const powerUp = (e) => {
-    if(e.keyCode === )
+const powerUp = () => {
+    const{ row, cell } = findPlayer()
+    const{ enemyRow, enemyCell } = findEnemy()
+    //const{ decoyRow, decoyCell } = findDecoy()
+    gameBoard[0][0] = 1
+    gameBoard[row][cell] = 3
 }
 
 const buildGameBoard = () => {
@@ -188,6 +242,8 @@ const buildGameBoard = () => {
                 thisCell.classList.add('player')
             } else if(cell === 2) {
                 thisCell.classList.add('enemy')
+            } else if(cell === 3) {
+                thisCell.classList.add('decoy')
             }
             thisCell.id = `${i} ${j}`
             thisCell.innerText = cellValue(gameBoard[i][j])
@@ -206,6 +262,7 @@ const runGame = () => {
     buildGameBoard()
     enemyAI()
     score()
+
 }
 
 refresh.addEventListener('click', runGame)
