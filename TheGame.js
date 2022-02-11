@@ -1,7 +1,23 @@
 
 
 let theBoard = document.createElement('table')
-let refresh = document.getElementById('refresh') //isn't working with the enemy AI
+let HUD = document.createElement('p')
+//let refresh = document.getElementById('refresh') //isn't working with the enemy AI
+
+let totalPowerUps = 0
+let buildPowerUps = () => {
+    HUD.innerText = ''
+    totalPowerUps++
+    console.log(totalPowerUps)
+    if(totalPowerUps === 1) {
+        HUD.innerText = 'You Have 1 Power Up'
+    } else {
+        HUD.innerText = `You Have ${totalPowerUps} Power Ups`
+    }
+
+    document.body.append(HUD)
+}
+
 
 //the timer is the score
 let secondsElapsed = 0
@@ -37,7 +53,6 @@ const gameBoard = [ // where the game state is stored
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3],
 ]
 
 const cellValue = (cell) => { //reads the 1 as the player and 2 as the enemy
@@ -86,7 +101,6 @@ const findDecoy = () => { //finds the decoy block's position
 //the movement functions
 const moveRight = () => {
     const{ row, cell } = findPlayer()
-    console.log(row, cell)
     if(cell === gameBoard[row].length -1) {
         gameBoard[row][0] = 1
         gameBoard[row][cell] = 0
@@ -94,7 +108,6 @@ const moveRight = () => {
     }
     gameBoard[row][cell + 1] = 1
     gameBoard[row][cell] = 0
-    console.log(gameBoard)
 }
 
 const moveLeft = () => {
@@ -132,7 +145,6 @@ const moveDown = () => {
 
 const movement = (e) => { //the player's movement
     e.preventDefault()
-    console.log(e)
     if(e.keyCode === 39 || e.keyCode === 68) {
         moveRight()
     } else if(e.keyCode === 37 || e.keyCode === 65) {
@@ -141,7 +153,7 @@ const movement = (e) => { //the player's movement
         moveUp()
     } else if(e.keyCode === 40 || e.keyCode === 83) {
         moveDown()
-    } else if(e.keyCode === 32) {
+    } else if(e.keyCode === 32) { //the spacebar places a decoy
         powerUp()
     }
     buildGameBoard()
@@ -228,8 +240,16 @@ const powerUp = () => {
     const{ row, cell } = findPlayer()
     const{ enemyRow, enemyCell } = findEnemy()
     //const{ decoyRow, decoyCell } = findDecoy()
-    gameBoard[0][0] = 1
-    gameBoard[row][cell] = 3
+    console.log(totalPowerUps)
+    if(totalPowerUps) {
+        HUD.innerText = ''
+        gameBoard[0][0] = 1
+        gameBoard[row][cell] = 3
+        totalPowerUps--
+        HUD.innerText = `You Have ${totalPowerUps} Power Ups`
+        document.body.append(HUD)
+    }
+
 }
 
 const buildGameBoard = () => {
@@ -256,6 +276,7 @@ const buildGameBoard = () => {
 
 let enemyAI = setInterval(enemyMove, 200)
 let score = setInterval(timeElapsed, 1000)
+let powerUpBuilders = setInterval(buildPowerUps, 10000)
 
 
 const runGame = () => {
@@ -265,7 +286,7 @@ const runGame = () => {
 
 }
 
-refresh.addEventListener('click', runGame)
+//refresh.addEventListener('click', runGame)
 document.addEventListener('keydown', movement)
 
 
