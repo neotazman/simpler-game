@@ -1,9 +1,12 @@
 * {
     outline: 1px solid crimson;
+    box-sizing: border-box;
 }
 
 td {
-    size: 12px;
+    padding: 2px;
+    min-width: 5px;
+    min-height: 5px;
 }
 
 .player {

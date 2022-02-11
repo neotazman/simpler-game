@@ -1,16 +1,26 @@
 
 
 let theBoard = document.createElement('table')
-let refresh = document.getElementById('refresh')
+let refresh = document.getElementById('refresh') //isn't working with the enemy AI
 
+//the timer is the score
 let secondsElapsed = 0
 let timeElapsed = () => {
     secondsElapsed++
-    console.log(secondsElapsed)
 }
 
 const gameBoard = [ // where the game state is stored
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -117,7 +127,7 @@ const movement = (e) => { //the player's movement
         moveLeft()
     } else if(e.keyCode === 38 || e.keyCode === 87) {
         moveUp()
-    } else if(e.keyCode === 40 || 83) {
+    } else if(e.keyCode === 40 || e.keyCode === 83) {
         moveDown()
     }
 
@@ -164,8 +174,8 @@ const enemyMove = () => { //checks the player's position and the enemy's positio
     buildGameBoard()
 }
 
-const powerUp = () => {
-
+const powerUp = (e) => {
+    if(e.keyCode === )
 }
 
 const buildGameBoard = () => {
