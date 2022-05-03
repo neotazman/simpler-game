@@ -89,7 +89,7 @@ const enemy = {
     difficulty: 0,
     difficultyRise: () => { //the callback to increase on a timer
         clearInterval(enemyAI)
-        enemySpeed*= 0.9
+        enemy.speed*= 0.9
         enemyAI = setInterval(enemy.move, enemy.speed)
         difficultyLevel++
     },

@@ -1,5 +1,4 @@
-//IMPORTS
-//import enemy from "./Enemy.js"
+
 
 let theBoard = document.createElement('table')
 let HUD = document.createElement('p')
@@ -72,7 +71,7 @@ const findPlayer = () => { //finds the player's position. also checks if the pla
             }
         }
     }
-    document.write(`YOU LOSE! You scored ${secondsElapsed}`)
+    document.write(`GAME OVER! You scored ${secondsElapsed}`)
     clearInterval(enemyAI)
     clearInterval(score)
     clearInterval(difficulty)
@@ -278,7 +277,7 @@ const buildGameBoard = () => {
     document.body.append(theBoard)
 }
 
-
+//Difficulty calculation
 let enemySpeed = 300
 let difficultyLevel = 0
 const difficultyRise = () => {
