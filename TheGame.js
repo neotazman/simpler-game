@@ -4,6 +4,12 @@ let theBoard = document.createElement('table')
 let HUD = document.createElement('p')
 HUD.id = 'HUD'
 //let refresh = document.getElementById('refresh') //isn't working with the enemy AI
+const createResetButton = () => {
+    let theButton = document.createElement('button')
+    theButton.addEventListener('click', () => {
+        buildGameBoard()
+    })
+}
 
 //you get power ups over time
 let totalPowerUps = 0
@@ -77,6 +83,7 @@ const findPlayer = () => { //finds the player's position. also checks if the pla
     clearInterval(difficulty)
     clearInterval(powerUpBuilders)
     //clearInterval(HUDRefresh)
+    createResetButton()
     secondsElapsed = 0
 }
 
@@ -287,6 +294,7 @@ const difficultyRise = () => {
     enemyAI = setInterval(enemyMove, enemySpeed)
     difficultyLevel++
 }
+
 
 let difficulty = setInterval(difficultyRise, 5000)
 let enemyAI = setInterval(enemyMove, enemySpeed)
